@@ -43,26 +43,29 @@
     color: #aaa;
   }
   .main-card--cointainer {
-    margin-right: auto;
-    margin-left: auto;
-    
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 450px)); /* Adjusted grid-template-columns */
-    grid-gap: 30px; /* Adjusted grid-gap */
+    margin: 30px auto; 
+    display: flex; 
+    flex-wrap: wrap; 
     justify-content: space-around;
-    margin: 30px;
-    overflow: hidden;
+    padding: 0 15px; 
+    box-sizing: border-box; 
   }
   
   .card-container {
     margin: 25px auto 0;
     position: relative;
-    display: grid;
-    grid-template-columns: 1fr;
-    justify-content: space-around;
-    align-items: flex-start;
+    width: calc(33.33% - 20px); 
+    flex-grow: 1; 
+    max-width: 450px; 
+    min-width: 200px; 
     overflow: hidden;
+    box-sizing: border-box; 
   }
+  
+  html, body {
+    overflow-x: hidden; /* Ensure no horizontal scrollbar */
+  }
+  
   
   .card-container img {
     max-width: 100%;

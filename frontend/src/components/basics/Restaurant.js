@@ -4,6 +4,9 @@ import Menu from './menuApi';
 import MenuCard from './MenuCard';
 import Navbar from './Navbar';
 import SearchBar from './SearchBar'
+import MainNavbar from './mainNavbar';
+
+
 const uniqueList = [...new Set(Menu.map((currElem) => {
 
     return currElem.category;
@@ -12,6 +15,23 @@ const uniqueList = [...new Set(Menu.map((currElem) => {
 const Restaurant = ({ setLoginUser }) => {
     const [menuData, setMenuData] = useState(Menu);
     const [menuList, setMenuList] = useState(uniqueList)
+
+    const [showNavbar, setShowNavbar] = useState(true);
+
+    const handleSearchBarClick = () => {
+        setShowNavbar(false); // Hide Navbar when search bar is clicked
+
+    };
+
+    const handleNavbarClose = () => {
+        setShowNavbar(true); // Show Navbar when it's closed
+    };
+    const setMenuEmpty = () => {
+        setMenuData([])
+    }
+    const setMenu = () => {
+        setMenuData(Menu)
+    }
     const filterItem = (category) => {
         if (category !== 'all') {
             const updatedList = Menu.filter((currElem) => {
@@ -27,8 +47,7 @@ const Restaurant = ({ setLoginUser }) => {
     const filterItemOnSearch = (Name) => {
 
         const updatedList = Menu.filter((currElem) => {
-            console.log('2')
-            console.log(Name)
+
             return currElem.name == Name;
         })
 
@@ -41,8 +60,9 @@ const Restaurant = ({ setLoginUser }) => {
     return (
 
         <>
-            <Navbar filterItem={filterItem} menuList={menuList} />
-            <SearchBar filterItemOnSearch={filterItemOnSearch} />
+            <MainNavbar handlers={{ handleSearchBarClick, handleNavbarClose, setMenu, setMenuEmpty }} />
+            {showNavbar && <Navbar filterItem={filterItem} menuList={menuList} />}
+            {!showNavbar && <SearchBar filterItemOnSearch={filterItemOnSearch} />}
             <MenuCard menuData={menuData} />
 
             <div className="btn_cont">
