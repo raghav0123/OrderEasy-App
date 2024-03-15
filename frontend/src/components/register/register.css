@@ -7,6 +7,13 @@
     background: #f0f2f5;
     font-family: Arial, sans-serif;
   }
+ .label{
+     text-align: left;
+     padding-left: 1rem;
+     padding-right:1rem;
+     color: #2c3038;
+ }
+  
 .register {
     width: 400px;
     background: #fff;

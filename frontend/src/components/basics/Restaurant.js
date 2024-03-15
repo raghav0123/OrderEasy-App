@@ -5,7 +5,7 @@ import MenuCard from './MenuCard';
 import Navbar from './Navbar';
 import SearchBar from './SearchBar'
 import MainNavbar from './mainNavbar';
-
+import { useAuth, AuthProvider } from '../context/context.js'
 
 const uniqueList = [...new Set(Menu.map((currElem) => {
 
@@ -13,6 +13,9 @@ const uniqueList = [...new Set(Menu.map((currElem) => {
 })), 'all'];
 
 const Restaurant = ({ setLoginUser }) => {
+
+    const [auth, setAuth] = useAuth();
+
     const [menuData, setMenuData] = useState(Menu);
     const [menuList, setMenuList] = useState(uniqueList)
 
@@ -57,6 +60,7 @@ const Restaurant = ({ setLoginUser }) => {
     };
 
 
+
     return (
 
         <>
@@ -65,10 +69,7 @@ const Restaurant = ({ setLoginUser }) => {
             {!showNavbar && <SearchBar filterItemOnSearch={filterItemOnSearch} />}
             <MenuCard menuData={menuData} />
 
-            <div className="btn_cont">
 
-                <div className="logout-btn" onClick={() => setLoginUser({})} >Logout</div>
-            </div>
         </>
 
     )

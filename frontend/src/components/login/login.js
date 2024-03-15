@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import "./login.css";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
+import { useAuth, AuthProvider } from '../context/context.js'
+
 
 const Login = ({ setLoginUser }) => {
+    // const [auth, setAuth] = useAuth()
+    // console.log(auth)
     const navigate = useNavigate();
     const handleClick = () => {
         // 👇️ navigate programmatically
         navigate('/register');
     };
-
+    const [auth, setAuth] = useAuth();
     const [user, setUser] = useState({
         email: "",
         password: ""
@@ -25,12 +29,29 @@ const Login = ({ setLoginUser }) => {
 
     const login = () => {
         axios
-            .post("http://localhost:9002/login", user)
+            .post("http://localhost:9002/api/v1/auth/login", user)
             .then((res) => {
                 alert(res.data.message);
+
+
                 setLoginUser(res.data.user);
+
+                const response = res.data;
+                if (res && res.data.success) {
+                    setAuth({
+                        ...auth,
+                        user: res.data.user,
+                        token: res.data.token
+
+                    })
+                    localStorage.setItem('auth', JSON.stringify(res.data))
+                }
                 navigate('/')
-            });
+            })
+            .catch((error) => {
+
+                console.log("Error:", error)
+            })
     };
 
     return (
@@ -51,7 +72,8 @@ const Login = ({ setLoginUser }) => {
                     onChange={handleChange}
                     placeholder="Enter your Password"
                 />
-                <div className="button" onClick={login}>
+                <div className="button" onClick={() => { login(); setLoginUser({ user }); }}>
+
                     Login
                 </div>
                 <div>or</div>
