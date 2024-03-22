@@ -9,7 +9,16 @@ import Restaurant from './components/basics/Restaurant'
 import Dashboard from './components/basics/dashBoard.js';
 import { getTokenFromStorage, verifyToken } from './authUtils.js'; // Custom utility functions for handling tokens
 import PrivateRoute from './components/routes/private';
-
+import ForgetPassword from './components/forget-password/forget-password.js';
+import AdminRoute from './components/routes/adminRoute.js';
+import AdminRegister from './components/register/adminRegister';
+import AdminLogin from './components/login/adminLogin';
+import AdminDashboard from './components/basics/Admin/adminDashboard';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import CreateProduct from './components/basics/Admin/createProduct';
+import CreateCategory from './components/basics/Admin/createCategory';
+import Users from './components/basics/Admin/users';
+import UserDashboard from './components/basics/Users/userDashboard';
 const App = () => {
 
   const [auth, setAuth] = useAuth();
@@ -54,10 +63,20 @@ const App = () => {
 
 
           } />
+          <Route path='/forget-password' element={<ForgetPassword />} ></Route>
           <Route path='/dashboard' element={<PrivateRoute />} >
-            <Route path='' element={<Dashboard />} />
+            <Route path='user' element={<UserDashboard />} />
           </Route >
+          <Route path='/dashboard' element={<AdminRoute />} >
+            <Route path='admin' element={<AdminDashboard />} />
+            <Route path='admin/create-product' element={<CreateProduct />} />
+            <Route path='admin/create-category' element={<CreateCategory />} />
+            <Route path='admin/users' element={<Users />} />
+          </Route >
+
+          <Route path='/adminLogin' element={<AdminLogin />} />
           <Route path='/login' element={<Login setLoginUser={setLoginUser} />} />
+          <Route path='/adminRegister' element={<AdminRegister />} />
           <Route path='/register' element={<Register />} />
         </Routes>
 

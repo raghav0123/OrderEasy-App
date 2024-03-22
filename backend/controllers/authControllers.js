@@ -9,7 +9,7 @@ const comparePassword = async (password, hashedPassword) => {
 // register controller
 const registerController = async (req, res) => {
     try {
-        const { name, email, password, phone, address, answer } = req.body;
+        const { name, email, password, phone, address, answer, role } = req.body;
         //validations
         if (!name) {
             return res.send({ error: "Name is Required" });
@@ -48,22 +48,75 @@ const registerController = async (req, res) => {
             address,
             password,
             answer,
+            role
         }).save();
-
-        res.status(201).send({
-            success: true,
-            message: "User Register Successfully",
-            user,
-        });
+        if (role != 1) {
+            res.status(201).send({
+                success: true,
+                message: "User Register Successfully",
+                user,
+            });
+        }
+        else {
+            res.status(201).send({
+                success: true,
+                message: "Admin Register Successfully",
+                user,
+            });
+        }
     } catch (error) {
         console.log(error);
         res.status(500).send({
             success: false,
-            message: "Errro in Registeration",
+            message: "Error in Registeration",
             error,
         });
     }
 };
+//Forget Password
+const forgetPasswordController = async (req, res) => {
+    try {
+        const { email, answer, newPassword } = req.body;
+        if (!email || !newPassword || !answer) {
+            return res.status(400).send({
+                success: false,
+                message: "Invalid input data",
+            });
+        }
+
+        const user = await userModel.findOne({ email });
+        if (!user || user.answer !== answer) {
+            return res.status(404).send({
+                success: false,
+                message: "Email is not registered or answer is incorrect",
+            });
+        }
+
+        // Check if password is already set
+        const match = await comparePassword(newPassword, user.password);
+        if (match) {
+            return res.status(400).send({
+                success: false,
+                message: "Password is already set",
+            });
+        }
+
+        // Update user's password
+        await userModel.findByIdAndUpdate(user._id, { password: newPassword });
+        res.status(200).send({
+            success: true,
+            message: "Password reset successfully",
+        });
+    } catch (error) {
+        console.error("Error in forgetPasswordController:", error);
+        res.status(500).send({
+            success: false,
+            message: "Internal server error",
+            error: error.message,
+        });
+    }
+};
+
 
 //POST LOGIN
 const loginController = async (req, res) => {
@@ -110,7 +163,7 @@ const loginController = async (req, res) => {
                 email: user.email,
                 phone: user.phone,
                 address: user.address,
-
+                role: user.role
             },
             token,
         });
@@ -125,4 +178,4 @@ const loginController = async (req, res) => {
 };
 
 
-export default { registerController, loginController }
+export default { registerController, loginController, forgetPasswordController }

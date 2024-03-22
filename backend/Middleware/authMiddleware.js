@@ -4,10 +4,14 @@ import userModel from "../models/user.js";
 //Protected Routes token base
 export const requireSignIn = async (req, res, next) => {
     try {
+        const decode = JWT.verify(
+            req.headers.authorization,
+            process.env.JWT_SECRET
+        );
+        req.user = decode;
 
 
 
-        res.status(200).send({ ok: true });
         next();
     } catch (error) {
         console.log(error);
@@ -18,11 +22,57 @@ export const requireSignIn = async (req, res, next) => {
 //admin acceess
 export const isAdmin = async (req, res, next) => {
     try {
-        const user = await userModel.findById(req.user._id);
+        const { email, password } = req.body
+
+        const user = await userModel.findOne({ email });
         if (user.role !== 1) {
             return res.status(401).send({
                 success: false,
-                message: "UnAuthorized Access",
+                message: "Unauthorized Access",
+            });
+        } else {
+            next();
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(401).send({
+            success: false,
+            error,
+            message: "Error in admin middelware",
+        });
+    }
+};
+export const IsAdmin = async (req, res, next) => {
+    try {
+        const email = req.headers.email
+
+        const user = await userModel.findOne({ email });
+        if (user.role !== 1) {
+            return res.status(401).send({
+                success: false,
+                message: "Unauthorized Access",
+            });
+        } else {
+            next();
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(401).send({
+            success: false,
+            error,
+            message: "Error in admin middelware",
+        });
+    }
+};
+export const isUser = async (req, res, next) => {
+    try {
+        const { email, password } = req.body
+
+        const user = await userModel.findOne({ email });
+        if (user.role == 1) {
+            return res.status(401).send({
+                success: false,
+                message: "This is an Admin Account",
             });
         } else {
             next();

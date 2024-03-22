@@ -4,11 +4,11 @@ import axios from "axios"
 import { useNavigate, Link } from 'react-router-dom';
 
 
-const Register = () => {
+const AdminRegister = () => {
     const navigate = useNavigate();
     const handleClick = () => {
         // 👇️ navigate programmatically
-        navigate('/login');
+        navigate('/adminLogin');
     };
 
 
@@ -20,7 +20,7 @@ const Register = () => {
         phone: "",
         address: "",
         answer: "",
-        role: 0
+        role: 1
 
     })
 
@@ -35,10 +35,14 @@ const Register = () => {
     const register = () => {
         const { name, email, password, reEnterPassword, phone, address, answer, role } = user
         if (name && email && password && (password === reEnterPassword) && phone && address && answer) {
-            axios.post("http://localhost:9002/api/v1/auth/register", user)
+            axios.post("http://localhost:9002/api/v1/auth/adminRegister", user)
                 .then(res => {
                     alert(res.data.message)
-                    navigate('/login')
+                    navigate('/adminLogin')
+                })
+                .catch((error) => {
+
+                    console.log("Error:", error)
                 })
         } else {
             alert("invalid input")
@@ -50,7 +54,7 @@ const Register = () => {
         <div className="Regi-Cont">
             <div className="register">
                 {console.log("User", user)}
-                <h1>User Register</h1>
+                <h1>Admin Register</h1>
                 <div className="label" >Name:</div>
                 <input type="text" name="name" value={user.name} placeholder="Your Name" onChange={handleChange}></input>
                 <div className="label" >Email:</div>
@@ -68,10 +72,10 @@ const Register = () => {
                 <div className="button" onClick={register} >Register</div>
                 <div>or</div>
                 <div className="button" onClick={handleClick}>Login</div>
-                <Link to="/adminRegister" style={{ color: 'black' }}>Are You An Admin?</Link>
+                <Link to="/Register" style={{ color: 'black' }}>Are You A User?</Link>
             </div>
         </div>
     )
 }
 
-export default Register
+export default AdminRegister

@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 import axios from 'axios';
 import Spinner from './spinner.js';
 
-const PrivateRoute = () => {
+const AdminRoute = () => {
     const [ok, setOk] = useState(false);
     const [auth, setAuth] = useAuth();
     const Auth = JSON.parse(localStorage.getItem('auth'));
@@ -13,9 +13,11 @@ const PrivateRoute = () => {
         const authCheck = async () => {
 
             try {
-                const res = await axios.get("http://localhost:9002/api/v1/auth/user-auth", {
+                const res = await axios.get("http://localhost:9002/api/v1/auth/admin-auth", {
                     headers: {
-                        "Authorization": Auth?.token
+                        "Authorization": Auth?.token,
+                        "email": Auth.user.email,
+
                     }
                 });
 
@@ -35,4 +37,4 @@ const PrivateRoute = () => {
     return ok ? <Outlet /> : <Spinner />;
 };
 
-export default PrivateRoute;
+export default AdminRoute;

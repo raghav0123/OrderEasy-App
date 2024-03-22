@@ -1,23 +1,22 @@
+
+
 import React, { useState } from 'react';
-import './style.css';
-import Menu from './menuApi';
-import MenuCard from './MenuCard';
-import Navbar from './Navbar';
-import SearchBar from './SearchBar'
-import MainNavbar from './mainNavbar';
-import { useAuth, AuthProvider } from '../context/context.js'
+import { useNavigate } from 'react-router-dom'
+import '../style.css';
+import Menu from '../menuApi';
+import MenuCard from '../MenuCard';
+import Navbar from '../Navbar';
+import SearchBar from '../SearchBar'
+import MainNavbar from '../mainNavbar';
+import { useAuth, AuthProvider } from '../../context/context.js'
 import 'bootstrap/dist/css/bootstrap.min.css';
-const uniqueList = [...new Set(Menu.map((currElem) => {
+import AdminMenu from './adminMenu';
 
-    return currElem.category;
-})), 'all'];
-
-const Restaurant = ({ setLoginUser }) => {
-
+const Users = () => {
     const [auth, setAuth] = useAuth();
 
     const [menuData, setMenuData] = useState(Menu);
-    const [menuList, setMenuList] = useState(uniqueList)
+
 
     const [showNavbar, setShowNavbar] = useState(true);
 
@@ -58,21 +57,27 @@ const Restaurant = ({ setLoginUser }) => {
 
 
     };
-
-
-
     return (
-
         <>
-            <MainNavbar handlers={{ handleSearchBarClick, handleNavbarClose, setMenu, setMenuEmpty }} />
-            {showNavbar && <Navbar filterItem={filterItem} menuList={menuList} />}
-            {!showNavbar && <SearchBar filterItemOnSearch={filterItemOnSearch} />}
-            <MenuCard menuData={menuData} />
 
+            <div className='Container'>
 
+                <div className='sub-Container1'>
+                    <AdminMenu ></AdminMenu>
+                </div>
+                <div className='sub-Container2'>
+
+                    <MainNavbar handlers={{ handleSearchBarClick, handleNavbarClose, setMenu, setMenuEmpty }} />
+                    <div className='mainC'>
+                        <div className='card w-50 p-3 m-5 '>
+                            <h2> Users</h2>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </>
-
     )
-};
+}
 
-export default Restaurant
+export default Users
