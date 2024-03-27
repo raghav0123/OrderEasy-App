@@ -1,18 +1,14 @@
 import React, { useState, useRef } from 'react';
 import './SearchBar.css';
-
+import { useNavigate } from 'react-router-dom'
 const SearchBar = ({ filterItemOnSearch }) => {
-
+    const navigate = useNavigate()
     const searchRef = useRef(null)
 
     // const handleSearchChange = (event) => {
     //     setSearchTerm(event.target.value);
     // };
 
-    const handleSearchClick = () => {
-        // alert(`Searching for: ${searchTerm}`);
-        console.log(searchRef.current)
-    };
 
     return (
         <nav className='navbar'>
@@ -23,7 +19,7 @@ const SearchBar = ({ filterItemOnSearch }) => {
                     placeholder="Search..."
                     ref={searchRef}
                 />
-                <button className="search-button" onClick={() => filterItemOnSearch(searchRef.current.value)}>Search</button>
+                <button className="search-button" onClick={() => { filterItemOnSearch(searchRef.current.value) }}>Search</button>
             </div>
         </nav>
     );

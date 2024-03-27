@@ -3,7 +3,9 @@ import cors from "cors"
 import mongoose from "mongoose"
 import ConnectDB from "./config/db.js"
 import dotenv from "dotenv"
-import router from "./routes/authRoutes.js"
+import authRoutes from "./routes/authRoutes.js"
+import categoryRoutes from "./routes/categoryRoutes.js"
+import productRoutes from "./routes/productRoutes.js"
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded())
@@ -15,8 +17,9 @@ app.use(cors())
 ConnectDB()
 
 //routes
-app.use("/api/v1/auth", router);
-
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/category", categoryRoutes);
+app.use("/api/v1/product", productRoutes);
 // const userSchema = new mongoose.Schema({
 //     name: String,
 //     email: String,

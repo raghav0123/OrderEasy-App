@@ -13,11 +13,7 @@ const PrivateRoute = () => {
         const authCheck = async () => {
 
             try {
-                const res = await axios.get("http://localhost:9002/api/v1/auth/user-auth", {
-                    headers: {
-                        "Authorization": Auth?.token
-                    }
-                });
+                const res = await axios.get("http://localhost:9002/api/v1/auth/user-auth");
 
                 setOk(res.data.ok);
             } catch (error) {

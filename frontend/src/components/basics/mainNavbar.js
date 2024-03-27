@@ -12,8 +12,8 @@ const MainNavbar = ({ handlers }) => {
     const handleDropdownClick = () => {
         setIsActive(!isActive);
     };
+    const navigate = useNavigate()
 
-    console.log(auth)
     const Navigate = useNavigate()
     const logout = () => {
 
@@ -25,7 +25,13 @@ const MainNavbar = ({ handlers }) => {
         })
         localStorage.removeItem('auth')
         setTimeout(() => {
-            window.location.href = "./login";
+            if (auth.user.role != 1) {
+                navigate('/login');
+            }
+            else {
+                navigate('/adminlogin');
+            }
+
         }, 1000); // Redirect after 1 second
         toast.success('Logout Successfully')
 
@@ -41,7 +47,8 @@ const MainNavbar = ({ handlers }) => {
                 </div>
                 <div>
                     <div className='btn-group2'>
-                        <btn className='btn-group__item' onClick={() => { handleSearchBarClick(); setMenuEmpty(); }}>Search</btn>
+
+                        <btn className='btn-group__item' onClick={() => { handleSearchBarClick(); setMenuEmpty(); navigate('/') }}>Search</btn>
 
                         {auth.user != null ? (
 

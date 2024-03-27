@@ -6,6 +6,7 @@ import Navbar from './Navbar';
 import SearchBar from './SearchBar'
 import MainNavbar from './mainNavbar';
 import { useAuth, AuthProvider } from '../context/context.js'
+import { useNavigate } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 const uniqueList = [...new Set(Menu.map((currElem) => {
 
@@ -13,7 +14,7 @@ const uniqueList = [...new Set(Menu.map((currElem) => {
 })), 'all'];
 
 const Restaurant = ({ setLoginUser }) => {
-
+    const navigate = useNavigate()
     const [auth, setAuth] = useAuth();
 
     const [menuData, setMenuData] = useState(Menu);
