@@ -1,0 +1,15 @@
+.MainC{
+    background-color:  #ffffff;
+   
+   
+}
+.sub-Container2{
+    background-color:  #ffffff;
+}
+.container{
+    display: flex;
+    justify-content: center;
+}
+.card{
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}

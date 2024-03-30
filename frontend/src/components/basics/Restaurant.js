@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 import './style.css';
 import Menu from './menuApi';
 import MenuCard from './MenuCard';
@@ -16,7 +18,7 @@ const uniqueList = [...new Set(Menu.map((currElem) => {
 const Restaurant = ({ setLoginUser }) => {
     const navigate = useNavigate()
     const [auth, setAuth] = useAuth();
-
+    const [products, setProducts] = useState([]);
     const [menuData, setMenuData] = useState(Menu);
     const [menuList, setMenuList] = useState(uniqueList)
 
@@ -60,7 +62,22 @@ const Restaurant = ({ setLoginUser }) => {
 
     };
 
-
+    const getAllProducts = async () => {
+        try {
+          const { data } = await axios.get(
+            "http://localhost:9002/api/v1/product/get-product"
+          );
+          setProducts(data.products);
+        } catch (error) {
+          console.log(error);
+          toast.error("Someething Went Wrong");
+        }
+      };
+    
+      //lifecycle method
+      useEffect(() => {
+        getAllProducts();
+      }, []);
 
     return (
 
@@ -68,7 +85,7 @@ const Restaurant = ({ setLoginUser }) => {
             <MainNavbar handlers={{ handleSearchBarClick, handleNavbarClose, setMenu, setMenuEmpty }} />
             {showNavbar && <Navbar filterItem={filterItem} menuList={menuList} />}
             {!showNavbar && <SearchBar filterItemOnSearch={filterItemOnSearch} />}
-            <MenuCard menuData={menuData} />
+            <MenuCard menuData={products} />
 
 
         </>

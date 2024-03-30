@@ -12,6 +12,7 @@ const AdminMenu = () => {
                     <br></br>
                     <button className='btn-group__item' onClick={() => { navigate('/dashboard/admin/create-category'); }} class="btn-group__item2 link">Create Category</button >
                     <button className='btn-group__item' onClick={() => { navigate('/dashboard/admin/create-product'); }} class="btn-group__item2 link">Create Product</button >
+                    <button className='btn-group__item' onClick={() => { navigate('/dashboard/admin/products'); }} class="btn-group__item2 link"> Products</button >
                     <button className='btn-group__item' onClick={() => { navigate('/dashboard/admin/users'); }} class=" btn-group__item2  link">Users</ button>
 
                 </div>

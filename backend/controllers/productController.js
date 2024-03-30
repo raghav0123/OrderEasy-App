@@ -137,7 +137,7 @@ export const updateProductController = async (req, res) => {
         //alidation
         switch (true) {
             case !name:
-                return res.status(500).send({ error: "Name is Required" });
+                return res.status(500).send({message: "Name is Required" });
             case !description:
                 return res.status(500).send({ error: "Description is Required" });
             case !price:

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../style.css";
 import Menu from "../menuApi";
 import MenuCard from "../MenuCard";
@@ -15,7 +15,7 @@ import { Select } from "antd";
 import "./admin.css";
 const { Option } = Select;
 
-const CreateProduct = () => {
+const UpdateProduct = () => {
   const [auth, setAuth] = useAuth();
 
   const [menuData, setMenuData] = useState(Menu);
@@ -62,8 +62,31 @@ const CreateProduct = () => {
   const [quantity, setQuantity] = useState("");
   const [shipping, setShipping] = useState("");
   const [photo, setPhoto] = useState("");
+  const params = useParams();
+  const [id, setId] = useState("");
+  const [cat, setCat] = useState("");
+  //GET SINGLE PRDUCT
+  const getSingleProduct = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:9002/api/v1/product/get-product/${params.slug}`
+      );
+      setName(data.product.name);
+      setId(data.product._id);
+      setDescription(data.product.description);
+      setPrice(data.product.price);
+      setQuantity(data.product.quantity);
+      setShipping(data.product.shipping);
+      setCat( data.product.category);
+      setCategory(data.product.category._id)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getSingleProduct();
+  }, []);
 
-  //get all category
   const getAllCategory = async () => {
     try {
       const { data } = await axios.get(
@@ -81,9 +104,8 @@ const CreateProduct = () => {
   useEffect(() => {
     getAllCategory();
   }, []);
-
   //create product function
-  const handleCreate = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
     try {
       const productData = new FormData();
@@ -91,26 +113,44 @@ const CreateProduct = () => {
       productData.append("description", description);
       productData.append("price", price);
       productData.append("quantity", quantity);
-      productData.append("photo", photo);
+      photo && productData.append("photo", photo);
       productData.append("category", category);
-      const { data } = axios.post(
-        "http://localhost:9002/api/v1/product/create-product",
+      const { data } = axios.put(
+        `http://localhost:9002/api/v1/product/update-product/${id}`,
         productData
       );
       if (data?.success) {
-        toast.error(data.error);
-        
+        toast.success(data.message);
       } else {
-        toast.success("Product Created Successfully");
+        toast.success("Product Updated Successfully");
         navigate("/dashboard/admin/products");
-        
       }
     } catch (error) {
       console.log(error);
       toast.error("something went wrong");
     }
   };
-
+//DELETE PRODUCT
+const handleDelete = async (e) => {
+  e.preventDefault();
+  try {
+    let answer= window.prompt('Are you sure?')
+    if (!answer){
+      return 
+    }
+    const { data } = axios.delete(
+      `http://localhost:9002/api/v1/product/delete-product/${id}`
+      
+    );
+    
+    toast.success("Product Deleted Successfully");
+      navigate("/dashboard/admin/products");
+    
+  } catch (error) {
+    console.log(error);
+    toast.error("something went wrong");
+  }
+};
   return (
     <>
       <div className="Container">
@@ -133,19 +173,20 @@ const CreateProduct = () => {
           </div>
           <div className=" text-center row-9 ">
             <div className="CARD w-100 p-1 h-100  ">
-              <h1>Create Product</h1>
+              <h1>Update Product</h1>
               <div className="container-fluid  p-4">
                 <div className="row mt-2">
                   <div className="">
                     <Select
                       bordered={false}
-                      placeholder="Select a category"
+                      placeholder="enter Category "
                       size="large"
                       showSearch
                       className="form-select mb-3"
                       onChange={(value) => {
                         setCategory(value);
                       }}
+                      value={cat.name}
                     >
                       {categories?.map((c) => (
                         <Option key={c._id} value={c._id}>
@@ -166,10 +207,19 @@ const CreateProduct = () => {
                       </label>
                     </div>
                     <div className="mb-3">
-                      {photo && (
+                      {photo ? (
                         <div className="text-center">
                           <img
                             src={URL.createObjectURL(photo)}
+                            alt="product_photo"
+                            height={"180px"}
+                            className="img img-responsive"
+                          />
+                        </div>
+                      ) : (
+                        <div className="text-center">
+                          <img
+                            src={`http://localhost:9002/api/v1/product/product-photo/${id}`}
                             alt="product_photo"
                             height={"180px"}
                             className="img img-responsive"
@@ -231,10 +281,16 @@ const CreateProduct = () => {
                     </div>
                     <div className="mb-3">
                       <button
-                        className="btn btn-primary"
-                        onClick={handleCreate}
+                        className="btn btn-primary m-2"
+                        onClick={handleUpdate}
                       >
-                        CREATE PRODUCT
+                        Update
+                      </button>
+                      <button
+                        className="btn btn-danger m-2"
+                        onClick={handleDelete}
+                      >
+                        Delete
                       </button>
                     </div>
                   </div>
@@ -248,4 +304,4 @@ const CreateProduct = () => {
   );
 };
 
-export default CreateProduct;
+export default UpdateProduct;
